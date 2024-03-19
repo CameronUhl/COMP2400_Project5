@@ -29,5 +29,6 @@ void clear (Movie* root);
 int count (Movie* root);
 long long totalRevenue (Movie* root);
 Movie* highestGrossing (Movie* root);
+int compare(Movie* movie, char* name, int year);
 
 #endif
