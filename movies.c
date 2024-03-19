@@ -5,9 +5,9 @@
 int main()
 {
 	Movie* genreTrees[GENRES];
-	
-	
-
+	for(int i = 0; i < GENRES; ++i){
+		genreTrees[i] = NULL;
+	}
 }
 
 
@@ -34,6 +34,17 @@ Movie* insert (Movie* root, char* name, int year, int minutes, int genre, long l
 	}
 	
 	return root;
+}
+
+Movie* search (Movie* root, char* name, int year){
+	Movie* temp
+	
+	if(compare(root, name, year) )
+		return 
+	else
+		return NULL;
+	
+	search(root->next, name, year);
 }
 
 int compare(Movie* movie, char* name, int year)
