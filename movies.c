@@ -97,22 +97,93 @@ void printMovie(Movie* movie)
 
 int printMatches (Movie* root, char* name)
 {
-	if(root != NULL && strcmp(root->name, name) == 0)
+	int counter = 0;
+	if(root != NULL)
 	{
 		printMatches(root->left);
-		printMovie(root);
+		if(!strcmp(root->name, name))
+			{
+				printMovie(root);
+				counter++;
+			}
 		printMatches(root->right);
 	}
-	return 0;
+	return counter;
 }
 
-void printAll (FILE* file, Movie* root);
+void printAll (FILE* file, Movie* root)
+{
+	//preorder NLR FIX THIS. HOW TO PUT TABS IN FWRITE
+	fwrite(root->name, sizeof(Movie), count(root), file);
+	printf("\t");
+	fwrite(root->year, sizeof(Movie), count(root), file);
+	printf("\t");
+	fwrite(root->length, sizeof(Movie), count(root), file);
+	printf("\t");
+	fwrite(root->genre, sizeof(Movie), count(root), file);
+	fwrite(root->revenue, sizeof(Movie), count(root), file);
+	fclose(file);
+}
 //
 
 //STATISTICS
-int count (Movie* root);
-long long totalRevenue (Movie* root);
-Movie* highestGrossing (Movie* root);
+int count (Movie* root)
+{
+	if(root == NULL)
+	{
+		return 0;
+	}
+	
+	else
+	{
+		return count(root->left) + count(root->right) + count(root);
+	}
+}
+
+long long totalRevenue (Movie* root)
+{
+	if(root == NULL)
+	{
+		return 0;
+	}
+	
+	else
+	{
+		return totalRevenue(root->left) + totalRevenue(root->right) + root->revenue;
+	}
+}
+
+Movie* highestGrossing (Movie* root)
+{
+	Movie* temp;
+	Movie* highest;
+	
+	if(root == NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		highest = root->revenue;
+		temp = highestGrossing(root->left);
+		if(temp != NULL && temp->revenue >= highest->revenue)
+		{
+			highest = temp;
+		}
+		
+		temp = highestGrossing(root->right);
+		if(temp != NULL && temp->revenue >= highest->revenue)
+		{
+			highest = temp;
+		}
+		
+		if(highest == 0) //error case
+		{
+			return -1;
+		}
+		return highest;
+	}
+}
 //
 
 int compare(Movie* movie, char* name, int year)
