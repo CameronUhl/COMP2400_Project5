@@ -341,12 +341,72 @@ Movie* delete (Movie* root, char* name, int year)
 		return NULL;
 	}
 	
-	else if(strcmp(name, root->name) == 0)
+	else
 	{
-		free(root);
+		int cmp = compare(root, name, year);
+		
+		//if root does not have any children.
+		if(cmp < 0)
+		{
+			root->left = delete(root->left, name, year);
+		}
+		
+		else if(cmp > 0)
+		{
+			root->right = delete(root->right, name, year);
+		}
+		
+		else
+		{
+			//one child
+			if(root->right == NULL)
+			{
+				Movie* temp = root->left;
+				free(root->name);
+				free(root);
+				return temp;
+			}
+			
+			//one child
+			else if(root->left == NULL)
+			{
+				Movie* temp = root->right;
+				free(root->name);
+				free(root);
+				return temp;
+			}
+			
+			//both children
+			else 
+			{
+				if(root->right->left == NULL)
+				{
+					Movie* temp = root->right;
+					temp->left = root->left;
+					free(root->name);
+					free(root);
+					return temp;
+				}	
+				
+				else	
+				{
+					Movie* parent = root->right;
+					Movie* temp = root->right->left;
+					while(temp->left != NULL)
+					{
+						temp = temp->left;
+						parent = parent->left;
+					}
+					parent->left = temp->right;
+					temp->left = root->left;
+					temp->right = root->right;
+					free(root->name);
+					free(root);
+					return temp;
+				}		
+			}
+		}
 	}
-	//not finished.
-
 }
 
 void clear (Movie* root)
