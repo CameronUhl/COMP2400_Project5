@@ -87,7 +87,40 @@ int main()
 		}
 		else if (!strcmp(choice, "delete"))
 		{
-			// Delete stuff
+			printf("\nEnter name: ");
+			char name[1024];
+			readToTab(stdin, name);
+			
+			printf("Enter year: ");
+			int year;
+			scanf("%d", &year);
+			
+			printf("Enter genre: ");
+			char genreName[100];
+			scanf("%s", genreName);
+			int genre = genreType(genreName);
+			
+			if(year < 1900 || year > 2050)
+			{
+				printf("Delete failed: Invalid year %d\n\n", year);
+			}
+			else if (genre == -1)
+			{
+				printf("Delete failed: Invalid genre %s\n\n", genreName);
+			}
+			else
+			{
+				Movie* temp = delete(genreTrees[genre], name, year);
+			
+				if (temp == NULL)
+				{
+					printf("Delete failed: Movie %s (%d) not found in genre %s\n\n", name, year, genreName);
+				}
+				else
+				{
+					printf("Delete succeeded\n\n");
+				}
+			}
 		}
 		else if (!strcmp(choice, "find"))
 		{
