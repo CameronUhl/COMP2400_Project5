@@ -16,6 +16,7 @@ extern const char* GENRE_NAMES[GENRES];
 
 int main()
 {
+	//instantiating the tree structure
 	Movie* genreTrees[GENRES];
 	for(int i = 0; i < GENRES; ++i){
 		genreTrees[i] = NULL;
@@ -52,7 +53,7 @@ int main()
 			long long revenue;
 			scanf("%lld", &revenue);
 			
-			
+			//ERROR CASES
 			if (year < 1900 || year > 2050)
 			{
 				printf("Add failed: Invalid year %d\n\n", year);
@@ -75,11 +76,11 @@ int main()
 				genreTrees[genre] = insert(genreTrees[genre], name, year, minutes, genre, revenue);
 			}
 		}
-		else if (!strcmp(choice, "clear"))
+		else if (!strcmp(choice, "clear")) //clears all trees
 		{
 			for (int i = 0; i < GENRES; i++)
 			{
-				free(genreTrees[i]);
+				free(genreTrees[i]); //frees the root of all trees
 				genreTrees[i] = NULL;
 			}
 
@@ -122,7 +123,7 @@ int main()
 				}
 			}
 		}
-		else if (!strcmp(choice, "find"))
+		else if (!strcmp(choice, "find")) //finds all matches of movies that share the same name
 		{
 			printf("\nEnter name: ");
 			char movieName[100];
@@ -137,7 +138,7 @@ int main()
 			printf("%d matches found.\n\n", total);
 			
 		}
-		else if (!strcmp(choice, "help"))
+		else if (!strcmp(choice, "help")) //help menu for user
 		{
 			printf("\nCommand\n\nadd\n\tAdds a movie to the current list\n\n");
 			printf("clear\n\tClears the current list of movies\n\n");
@@ -150,7 +151,7 @@ int main()
 			printf("save\n\tSaves the current list of movies to a file\n\n");
 			printf("statistics\n\tPrints out statistics for each genre\n\n\n");
 		}
-		else if (!strcmp(choice, "load"))
+		else if (!strcmp(choice, "load")) //loads the file into the genre trees
 		{
 			printf("\nEnter file: ");
 			char fileName[100];
@@ -251,6 +252,8 @@ int main()
 	HELPER FUNCTIONS
 
 *****************************/
+
+//finds the correct index based on the genre inputed
 int genreType(char* genreName)
 {
 	for (int i = 0; i < GENRES; i++) 
@@ -264,6 +267,7 @@ int genreType(char* genreName)
 	return -1;
 }
 
+//reads until a tab, newline, or end of file is found
 int readToTab(FILE* file, char* data)
 {
 	int index = 0;
@@ -280,8 +284,8 @@ int readToTab(FILE* file, char* data)
 	return index;
 }
 
-
-
+//reads the text file into the program. Takes into account the year,
+// minutes, genre, and revenue
 int readFile(FILE* file, Movie* genreTrees[])
 {
 	int total = 0;	
@@ -312,6 +316,7 @@ int readFile(FILE* file, Movie* genreTrees[])
 	return total;
 }
 
+//determines whether the name and movie name are the same
 int compare(Movie* movie, char* name, int year)
 {
 	int cmp = strcmp(name, movie->name);
@@ -327,6 +332,9 @@ int compare(Movie* movie, char* name, int year)
 	TREE STRUCTURE
 
 ***************************/
+
+//Adds a movie into the tree structure. If a movie already exists in the tree
+//with the same name and year, returns the tree unchanged. 
 Movie* insert (Movie* root, char* name, int year, int minutes, int genre, long long revenue)
 {
 	if (root == NULL)
@@ -353,8 +361,8 @@ Movie* insert (Movie* root, char* name, int year, int minutes, int genre, long l
 }
 
 
-
-
+//Searches within a tree to find the name and year. 
+//Returns a pointer if found, NULL otherwise
 Movie* search (Movie* root, char* name, int year)
 {
 	if(root == NULL)
@@ -453,6 +461,7 @@ Movie* delete (Movie* root, char* name, int year)
 	}
 }
 
+//clears the root within the tree
 void clear (Movie* root)
 {
 	if(root != NULL)
@@ -472,6 +481,8 @@ void clear (Movie* root)
 	INFORMATION
 
 ************************/
+
+//prints the name, length, genre, and revenue of the movie.
 void printMovie(Movie* movie)
 {
 	if(movie->revenue == 0) //prints revenue as unknown
@@ -481,6 +492,8 @@ void printMovie(Movie* movie)
 	}
 }
 
+//Prints all the movies that share the same name. Uses an INORDER traversal to 
+//print movies with an earlier year
 int printMatches (Movie* root, char* name)
 {
 	int counter = 0;
@@ -498,6 +511,7 @@ int printMatches (Movie* root, char* name)
 	return counter;
 }
 
+//Prints all the movies to a given open file. Is ordered by name, year, length, genre, and revenue
 /*
 int saveFile(FILE* file, Movie* root)
 {
@@ -520,6 +534,8 @@ int saveFile(FILE* file, Movie* root)
 	STATISTICS
 
 ***********************/
+
+//returns the number of nodes that are within the tree
 int count (Movie* root)
 {
 	if(root == NULL)
@@ -533,6 +549,7 @@ int count (Movie* root)
 	}
 }
 
+//returns the highest revenue within the tree
 long long totalRevenue (Movie* root)
 {
 	if(root == NULL)
@@ -545,6 +562,9 @@ long long totalRevenue (Movie* root)
 	}
 }
 
+//finds the movie with the highest revenue within the tree or NULL if a movie does not have
+//a higher revenue than 0. If there is a tie it takes the highest revenue that comes earliest 
+//in an INORDER traversal
 Movie* highestGrossing (Movie* root)
 {
 	Movie* temp;
