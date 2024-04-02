@@ -1,3 +1,14 @@
+/*******************************
+ *
+ *  Project Name: Project 5: LMDb: Local Movie Database
+ *  Description: This program is able to search through a text file and find various information
+ *	about movies regarding their names, revenue, genre, and release date. Movies are stored
+ *  in a BST. 
+ *  Date: Wednesday, April 3, 2024 at 11:59 p.m.
+ *  Authors: Cameron Uhl and Jacob Littler
+ *
+ *******************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include "movie.h"
