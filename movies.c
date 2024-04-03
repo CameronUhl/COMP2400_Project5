@@ -111,14 +111,13 @@ int main()
 			}
 			else
 			{
-				Movie* temp = delete(genreTrees[genre], name, year);
-			
-				if (temp == NULL)
+				if (search(genreTrees[genre], name, year) == NULL)
 				{
 					printf("Delete failed: Movie %s (%d) not found in genre %s\n\n", name, year, genreName);
 				}
 				else
 				{
+					genreTrees[genre] = delete(genreTrees[genre], name, year);
 					printf("Delete succeeded\n\n");
 				}
 			}
@@ -512,20 +511,15 @@ int printMatches (Movie* root, char* name)
 }
 
 //Prints all the movies to a given open file. Is ordered by name, year, length, genre, and revenue
-/*
-int saveFile(FILE* file, Movie* root)
+void printAll(FILE* file, Movie* root)
 {
-	//preorder NLR FIX THIS. HOW TO PUT TABS IN FWRITE
-	fwrite(root->name, sizeof(Movie), count(root), file);
-	printf("\t");
-	fwrite(root->year, sizeof(Movie), count(root), file);
-	printf("\t");
-	fwrite(root->length, sizeof(Movie), count(root), file);
-	printf("\t");
-	fwrite(root->genre, sizeof(Movie), count(root), file);
-	fwrite(root->revenue, sizeof(Movie), count(root), file);
+	if (root != NULL)
+	{
+		fprintf(file, "%s\t%d\t%d\t%s\t%lld\n", root->name, root->year, root->minutes, GENRE_NAMES[root->genre], root->revenue);
+		printAll(file, root->left);
+		printAll(file, root->right);
+	}
 }
-*/
 
 
 
